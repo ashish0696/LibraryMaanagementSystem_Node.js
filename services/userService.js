@@ -3,7 +3,7 @@ const { hashPassword } = require('../utils/authUtil');
 
 
 const createUser = async (userData) => {
-    const password_hash = userData.password ? await hashPassword(userData.password) : undefined;
+    const password_hash =  await hashPassword(userData.password);
     const user = await User.create({
         name: userData.name,
         email: userData.email,
@@ -11,7 +11,6 @@ const createUser = async (userData) => {
         password: password_hash,
         role: userData.role || 'member',
     });
-    console.log("in user Create service");
     return user;
 }
 
