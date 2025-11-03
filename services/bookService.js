@@ -12,6 +12,7 @@ const createBook = async (bookData) => {
     return book;
 }
 
+
 const updateBook =  async (id, bookData) => {
     const book = await Book.findByPk(id);
     if (!book) {
@@ -19,7 +20,9 @@ const updateBook =  async (id, bookData) => {
     }
     return book.update(bookData);
 }
-
+const getTotalBooksCount = async () => {
+    return await Book.count();
+}
 
 const getBookById = async (id) => {
     const book = await Book.findByPk(id);
@@ -29,6 +32,9 @@ const getBookById = async (id) => {
 const getAllBooks = async () => {
     return await Book.findAll();
 }
+const getAvailableBooks = async () => {
+    return await Book.findAll({ where: { status: 'available' } });
+};
 
 
 const deleteBook = async (id) => {
@@ -45,6 +51,8 @@ module.exports = {
     updateBook,
     deleteBook,
     getBookById,
-    getAllBooks
+    getAllBooks,
+    getTotalBooksCount,
+    getAvailableBooks
 };
 

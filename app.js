@@ -3,12 +3,12 @@ const bodyParser = require('body-parser');
 const { sequelize } = require('./config/dbConfig.js');
 const models = require('./models/index.js'); 
 const routes = require('./routes/index.js');
-
+const dotenv = require('dotenv');
 const app = express();
 app.use(bodyParser.json());
 
-
-app.use('/api', routes);
+dotenv.config();
+app.use('/api/v1', routes);
 
 const PORT = process.env.PORT || 3000;
 

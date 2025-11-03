@@ -29,6 +29,9 @@ const getUserById = async (id) => {
         const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
         return user;
 }
+const getTotalUsersCount = async () => {
+    return await User.count();
+}
 
 const getAllUsers = async () => {
     return await User.findAll({ attributes: { exclude: ['password'] } });
@@ -50,5 +53,6 @@ module.exports = {
     updateUser,
     getUserById,
     getAllUsers,
-    removeUser
+    removeUser,
+    getTotalUsersCount
 };
