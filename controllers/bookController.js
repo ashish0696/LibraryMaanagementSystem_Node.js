@@ -1,8 +1,9 @@
 const bookService = require('../services/bookService.js');
-
+const {logger} = require('../utils/logger.js');
 const createBook = async (req, res) => {
     try {
         const book = await bookService.createBook(req.body);
+        logger.info(`Book created successfully: '${book.title}'`);
         res.status(201).json(book);
     } catch (error) {
         res.status(400).json({error: error.message });
@@ -12,6 +13,8 @@ const createBook = async (req, res) => {
 const updateBook = async (req, res) => {
     try {
         const book = await bookService.updateBook(req.params.id, req.body);
+        logger.info(`Book updated successfully: '${book.title}'`);
+
         res.status(200).json(book);
     } catch (error) {
         res.status(400).json({error: error.message });
@@ -39,6 +42,7 @@ const getAllBooks = async (req, res) => {
 const deleteBook = async (req, res) => {
     try {
         await bookService.deleteBook(req.params.id);
+        logger.info(`Book deleted successfully with ID: '${req.params.id}'`);
         res.status(204).send();
     } catch (error) {
         res.status(400).json({error: error.message });

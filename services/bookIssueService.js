@@ -1,5 +1,6 @@
 const BookIssue = require('../models/bookIssue.js');
 const { Op } = require('sequelize');
+const { logger } = require('../utils/logger.js');
 
 const requestBook = async (bookId, userId, returnDate) => {
     let parsedReturn = null;
@@ -39,6 +40,7 @@ const issueBook = async (issueId, approve) => {
         bookIssue.status = 'rejected';
     }
     await bookIssue.save();
+    logger.info(`Book issue status updated successfully with ID: '${issueId}' to status: '${bookIssue.status}'`);
     return bookIssue;
 }
 
@@ -95,6 +97,7 @@ const returnBook = async (issueId) => {
     bookIssue.status = status;
     bookIssue.return_date = actualReturn;
     await bookIssue.save();
+    logger.info(`Book return processed successfully with ID: '${issueId}', status set as: '${status}'`);
     return bookIssue;
 };
 

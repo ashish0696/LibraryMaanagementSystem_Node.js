@@ -4,11 +4,17 @@ const { sequelize } = require('./config/dbConfig.js');
 const models = require('./models/index.js'); 
 const routes = require('./routes/index.js');
 const dotenv = require('dotenv');
+const logger =require('./utils/logger.js');
 const app = express();
 app.use(bodyParser.json());
 
 dotenv.config();
 app.use('/api/v1', routes);
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
 
 const PORT = process.env.PORT || 3000;
 
