@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const {roleMiddleware} = require('../middleware/roleMiddleware');
 
 const bookIssueController = require('../controllers/bookIssueController');
 const { checkAuthJWT } = require('../middleware/authMiddleware');
 const { validateRequestBook, validateApproveBody, validateIssueId } = require('../validation/bookIssue.Validation');
-router.post('/request', checkAuthJWT, validateRequestBook, bookIssueController.requestBook);
-router.post('/return/:id', checkAuthJWT, validateIssueId, bookIssueController.returnBook);
-router.get('/daily', checkAuthJWT, bookIssueController.viewDailyIssuedBooks);
-router.get('/', checkAuthJWT, bookIssueController.viewAllIssuedBooks);
-router.post('/:id', checkAuthJWT, validateIssueId, validateApproveBody, bookIssueController.issueBook);
+
+router.post('/request', checkAuthJWT, roleMiddleware(['member']), validateRequestBook, bookIssueController.requestBook);
+router.post('/return/:id', checkAuthJWT, roleMiddleware(['member']), validateIssueId, bookIssueController.returnBook);
+router.get('/daily', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookIssueController.viewDailyIssuedBooks);
+router.get('/', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookIssueController.viewAllIssuedBooks);
+router.post('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), validateIssueId, validateApproveBody, bookIssueController.issueBook);
 
 module.exports = router;

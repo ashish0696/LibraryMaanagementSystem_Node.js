@@ -7,16 +7,17 @@ const {
 	validateUserId,
 } = require('../validation/users.validation');
 const {checkAuthJWT} = require('../middleware/authMiddleware');
+const {roleMiddleware} = require('../middleware/roleMiddleware');
 
 
 router.post('/', validateCreateUser, userController.createUser);
 
-router.put('/:id', checkAuthJWT, validateUserId, validateUpdateUser, userController.updateUser);
+router.put('/:id', checkAuthJWT, roleMiddleware(['superAdmin']), validateUserId, validateUpdateUser, userController.updateUser);
 
-router.get('/:id', checkAuthJWT, validateUserId, userController.getUserById);
+router.get('/:id', checkAuthJWT, roleMiddleware(['superAdmin']), validateUserId, userController.getUserById);
 
-router.get('/', checkAuthJWT, userController.getAllUsers);
+router.get('/', checkAuthJWT, roleMiddleware(['superAdmin']), userController.getAllUsers);
 
-router.delete('/:id', checkAuthJWT, validateUserId, userController.removeUser);
+router.delete('/:id', checkAuthJWT, roleMiddleware(['superAdmin']), validateUserId, userController.removeUser);
 
 module.exports = router;
