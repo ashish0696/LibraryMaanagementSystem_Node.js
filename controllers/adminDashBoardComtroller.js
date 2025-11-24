@@ -8,18 +8,23 @@ const getDashboardStats = async (req, res) => {
         const totalUsers = await userService.getTotalUsersCount();
         const totalIssuedBooks = await issueService.getTotalIssuedBooksCount();
         const overdueBooks = await issueService.getOverdueBooksCount();
-        res.status(200).json({
-            totalBooks,
-            totalUsers,
-            totalIssuedBooks,
-            overdueBooks
-        });
+        res.sendResponse({ totalBooks, totalUsers, totalIssuedBooks, overdueBooks }, 'Dashboard stats', true, 200);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.sendError(error.message, 500);
+    }
+};
+
+const getDailyIssues = async (req, res) => {
+    try {
+        const dailyIssues = await issueService.viewDailyIssuedBooks();
+        res.sendResponse({ dailyIssues }, 'Daily issued books count', true, 200);
+    } catch (error) {
+        res.sendError(error.message, 500);
     }
 };
 
 module.exports = {
-    getDashboardStats
+    getDashboardStats,
+    getDailyIssues
 };
 

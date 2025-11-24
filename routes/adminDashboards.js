@@ -6,4 +6,5 @@ const { roleMiddleware } = require('../middleware/roleMiddleware');
 
 
 router.get('/stats', checkAuthJWT, roleMiddleware(['superAdmin']), adminDashBoardComtroller.getDashboardStats);
+router.get('/daily-issues', checkAuthJWT, roleMiddleware(['superAdmin']), adminDashBoardComtroller.getDailyIssues);
 module.exports = router;

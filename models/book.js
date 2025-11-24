@@ -24,8 +24,13 @@ const book = sequelize.define('Book', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'image_url'
+    },
     status: {
-        type: DataTypes.ENUM("available", "issued", "reserved", "lost"),
+        type: DataTypes.ENUM("available", "reserved"),
         allowNull: false,
         defaultValue: 'available',
     }

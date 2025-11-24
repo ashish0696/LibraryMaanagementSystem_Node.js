@@ -9,7 +9,9 @@ const { validateRequestBook, validateApproveBody, validateIssueId } = require('.
 router.post('/request', checkAuthJWT, roleMiddleware(['member']), validateRequestBook, bookIssueController.requestBook);
 router.post('/return/:id', checkAuthJWT, roleMiddleware(['member']), validateIssueId, bookIssueController.returnBook);
 router.get('/daily', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookIssueController.viewDailyIssuedBooks);
-router.get('/', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookIssueController.viewAllIssuedBooks);
-router.post('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), validateIssueId, validateApproveBody, bookIssueController.issueBook);
+router.get('/', checkAuthJWT, roleMiddleware(['librarian']), bookIssueController.viewAllIssuedBooks);
+router.post('/:id', checkAuthJWT, roleMiddleware(['librarian']), validateIssueId, validateApproveBody, bookIssueController.issueBook);
+router.get('/user', checkAuthJWT, roleMiddleware(['member']), bookIssueController.getIssuesByUser);
+router.get('/count', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookIssueController.countIssuedBooks);
 
 module.exports = router;

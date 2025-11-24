@@ -25,7 +25,7 @@ const BookIssue = sequelize.define('BookIssue', {
         allowNull: false,
     },
     status: {
-        type: DataTypes.ENUM("requested","issued", "rejected", "returned", "overdue"),
+        type: DataTypes.ENUM("requested","issued", "rejected", "returned","returning", "overdue"),
         defaultValue: "requested",
         allowNull: false,
     },

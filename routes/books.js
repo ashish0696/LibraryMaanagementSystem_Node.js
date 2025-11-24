@@ -9,10 +9,11 @@ router.post('/', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), valid
 
 router.put('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), validateBookId, validateUpdateBook, bookController.updateBook);
 
-router.get('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), validateBookId, bookController.getBookById);
+router.get('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin','member']), validateBookId, bookController.getBookById);
 
-router.get('/', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookController.getAllBooks);
+router.get('/', bookController.getAllBooks);
 
 router.delete('/:id', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), validateBookId, bookController.deleteBook);
+router.get('/count', checkAuthJWT, roleMiddleware(['librarian','superAdmin']), bookController.bookCount);
 
 module.exports = router;

@@ -1,8 +1,18 @@
 const User = require('../models/user');
 const { hashPassword } = require('../utils/authUtil');
+const { MESSAGES } = require('../utils/messages');
 
 
 const createUser = async (userData) => {
+    // check duplicate email first to provide a friendly error
+    const existing = await User.findOne({ where: { email: userData.email } });
+    if (existing) {
+        // throw an Error with consistent message consumed by controller/middleware
+        const err = new Error(MESSAGES.EMAIL_ALREADY_EXIST);
+        err.status = 400;
+        throw err;
+    }
+
     const password_hash =  await hashPassword(userData.password);
     const user = await User.create({
         name: userData.name,

@@ -5,18 +5,18 @@ const issueService = require('../services/bookIssueService.js');
 const getAvailableBooks = async (req, res) => {
     try {
         const books = await bookService.getAvailableBooks();
-        res.status(200).json(books);
+        res.sendResponse(books, 'Available books', true, 200);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.sendError(error.message, 500);
     }
 };
 
 const myBookIssues = async (req, res) => {
     try {
         const issuedBooks = await issueService.viewUserBookIssues(req.user.id);
-        res.status(200).json(issuedBooks);
+        res.sendResponse(issuedBooks, 'My issued books', true, 200);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.sendError(error.message, 500);
     }
 };
 

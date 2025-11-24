@@ -6,19 +6,19 @@ const checkAuthJWT = async (req, res, next) => {
         const authHeader = req.headers['authorization'] || req.headers['Authorization'];
         const token = authHeader && authHeader.split(' ')[1];
         if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
+            return res.sendError('No token provided', 401);
         }
 
         const decoded = verifyToken(token);
 
         const user = await User.findByPk(decoded.id);
         if (!user) {
-            return res.status(401).json({ message: 'Invalid or expired session token' });
+            return res.sendError('Invalid or expired session token', 401);
         }
         req.user = { id: user.user_id, role: user.role };
         next();
     } catch (error) {
-        return res.status(401).json({ error: 'Invalid token' });
+    return res.sendError('Invalid token', 401);
     }
 };
 

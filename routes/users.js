@@ -14,7 +14,7 @@ router.post('/', validateCreateUser, userController.createUser);
 
 router.put('/:id', checkAuthJWT, roleMiddleware(['superAdmin']), validateUserId, validateUpdateUser, userController.updateUser);
 
-router.get('/:id', checkAuthJWT, roleMiddleware(['superAdmin']), validateUserId, userController.getUserById);
+router.get('/:id', checkAuthJWT, roleMiddleware(['superAdmin','librarian']), validateUserId, userController.getUserById);
 
 router.get('/', checkAuthJWT, roleMiddleware(['superAdmin']), userController.getAllUsers);
 

@@ -1,5 +1,5 @@
 const bookIssueService = require('../services/bookIssueService.js');
-const {logger} = require("../utils/logger.js");
+const logger = require("../utils/logger.js");
 const bookService = require('../services/bookService.js');
 
 const requestBook = async (req, res) => {
@@ -10,10 +10,10 @@ const requestBook = async (req, res) => {
         const bookIssue = await bookIssueService.requestBook(bookId, userId, returnDate);
         logger.info(`Book requested successfully: '${book.title}' by user: ${userId}`);
 
-        res.status(201).json(bookIssue);
+    res.sendResponse(bookIssue, 'Book requested', true, 201);
 
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.sendError(error.message, 400);
     }   
 };
 
@@ -24,9 +24,9 @@ const issueBook = async (req, res) => {
         const bookIssue = await bookIssueService.issueBook(issueId, approve);
         logger.info(`Book issued successfully with ID: '${issueId}' with approval: ${approve}`);
 
-        res.status(200).json(bookIssue);
+        res.sendResponse(bookIssue, 'Book issue updated', true, 200);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.sendError(error.message, 400);
     }
 };
 
@@ -34,9 +34,9 @@ const issueBook = async (req, res) => {
 const viewAllIssuedBooks = async (req, res) => {
     try {
         const bookIssues = await bookIssueService.viewAllBookIssues();
-        res.status(200).json(bookIssues);
+        res.sendResponse(bookIssues, 'Issued books', true, 200);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.sendError(error.message, 400);
     }
 };
 
@@ -44,9 +44,9 @@ const viewDailyIssuedBooks = async (req, res) => {
     try {
         const { date } = req.query;
         const bookIssues = await bookIssueService.viewDailyIssuedBooks(date);
-        res.status(200).json(bookIssues);
+        res.sendResponse(bookIssues, 'Daily issued books', true, 200);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.sendError(error.message, 400);
     }
     // console.log("in bookIssue Controller, Daily Issued Books");
 
@@ -57,18 +57,37 @@ const returnBook = async (req, res) => {
         const issueId = req.params.id;
         const bookIssue = await bookIssueService.returnBook(issueId);
         logger.info(`Book returned successfully with ID: '${issueId}'`);
-        res.status(200).json(bookIssue);
+        res.sendResponse(bookIssue, 'Book returned', true, 200);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.sendError(error.message, 400);
+    }
+};
+const getIssuesByUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        if (!userId) return res.sendError('Authentication required', 401);
+        const bookIssues = await bookIssueService.viewUserBookIssues(userId);
+        res.sendResponse(bookIssues, 'User issued books', true, 200);
+    } catch (error) {
+        res.sendError(error.message, 400);
     }
 };
 
-
+const countIssuedBooks = async (req, res) => {
+    try {
+        const count = await bookIssueService.getTotalIssuedBooksCount();
+        res.sendResponse({ count }, 'Total issued books count', true, 200);
+    } catch (error) {
+        res.sendError(error.message, 400);
+    }
+};
 
 module.exports = {
     requestBook,
     issueBook,
     viewAllIssuedBooks,
     viewDailyIssuedBooks,
-    returnBook
+    returnBook,
+    getIssuesByUser,
+    countIssuedBooks
 };

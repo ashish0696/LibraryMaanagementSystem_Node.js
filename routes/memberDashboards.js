@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const memberDashboardController = require('../controllers/memberDashboard.js');
+const memberDashboardController = require('../controllers/memberDashboardController.js');
 const { checkAuthJWT } = require('../middleware/authMiddleware');
 const { roleMiddleware } = require('../middleware/roleMiddleware');
 

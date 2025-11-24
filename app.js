@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { sequelize } = require('./config/dbConfig.js');
 const models = require('./models/index.js'); 
 const routes = require('./routes/index.js');
@@ -7,6 +8,11 @@ const dotenv = require('dotenv');
 const logger =require('./utils/logger.js');
 const app = express();
 app.use(bodyParser.json());
+// enable CORS for frontend requests (configure origin as needed)
+app.use(cors());
+
+// attach standardized response helpers (res.sendResponse / res.sendError)
+app.use(require('./middleware/responseMiddleware'));
 
 dotenv.config();
 app.use('/api/v1', routes);

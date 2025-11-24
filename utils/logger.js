@@ -11,8 +11,15 @@ const logger = winston.createLogger({
     ),
     transports: [
         new winston.transports.File({ filename: path.join(__dirname, '../logs/app.log') }),
-        // new winston.transports.Console()
     ]
 });
 
-module.exports = { logger };
+// In non-production environments also log to the console for developer feedback
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
+
+// export the logger instance directly so callers can do `logger.info(...)`
+module.exports = logger;

@@ -7,6 +7,7 @@ const createBook = async (bookData) => {
         publisher: bookData.publisher,
         category: bookData.category,
         status: bookData.status || 'available',
+        imageUrl: bookData.imageUrl || null,
     });
     return book;
 }
@@ -35,6 +36,7 @@ const getAllBooks = async () => {
 const getAvailableBooks = async () => {
     return await Book.findAll({ where: { status: 'available' } });
 };
+
 
 
 const deleteBook = async (id) => {

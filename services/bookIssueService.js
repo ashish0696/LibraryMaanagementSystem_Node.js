@@ -1,6 +1,6 @@
 const BookIssue = require('../models/bookIssue.js');
 const { Op } = require('sequelize');
-const { logger } = require('../utils/logger.js');
+const logger = require('../utils/logger.js');
 
 const requestBook = async (bookId, userId, returnDate) => {
     let parsedReturn = null;
@@ -58,6 +58,38 @@ const getTotalIssuedBooksCount = async () => {
     return count;
 }
 
+const getIssuedBookList = async () => {
+    const issuedBooks = await BookIssue.findAll({
+        where: {
+            status: 'issued'
+        }
+    });
+    return issuedBooks;
+}
+
+const getReturnedBooksList = async () => {
+    const returnedBooks = await BookIssue.findAll({
+        where: {
+            status: 'returned'
+        }
+    });
+    return returnedBooks;
+}
+
+
+const getAllOverdueBookList = async () => {
+    const today = new Date();
+    const overdueBooks = await BookIssue.findAll({
+        where: {
+            status: 'overdue',
+            return_date: {
+                [Op.lt]: today
+            }
+        }
+    });
+    return overdueBooks;
+}
+
 const getOverdueBooksCount = async () => {
     const today = new Date();
     const count = await BookIssue.count({
@@ -76,6 +108,14 @@ const viewAllBookIssues = async () => {
     return bookIssues;
 }
 
+const getRequestedBooksList = async () => {
+    const requestedBooks = await BookIssue.findAll({
+        where: {
+            status: 'requested'
+        }
+    });
+    return requestedBooks;
+}
 
 const returnBook = async (issueId) => {
     const bookIssue = await BookIssue.findByPk(issueId);
@@ -119,6 +159,15 @@ const viewDailyIssuedBooks = async (date) => {
     return bookIssues;
 };
 
+const getReturnedBooksCount = async () => {
+    const count = await BookIssue.count({
+        where: {
+            status: 'returned'
+        }
+    });
+    return count;
+}
+
 
 module.exports = {
     requestBook,
@@ -128,5 +177,10 @@ module.exports = {
     viewDailyIssuedBooks,
     returnBook,
     getTotalIssuedBooksCount,
-    getOverdueBooksCount
+    getOverdueBooksCount,
+    getAllOverdueBookList,
+    getReturnedBooksCount,
+    getIssuedBookList,
+    getReturnedBooksList,
+    getRequestedBooksList
 };
